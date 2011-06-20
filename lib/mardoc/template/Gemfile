@@ -1,0 +1,4 @@
+gem 'rack', '>=1.0'
+gem 'erubis'
+gem 'rdiscount'
+gem 'mardoc'
