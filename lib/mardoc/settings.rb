@@ -5,6 +5,7 @@ module Mardoc
     include Singleton
     
     attr_accessor :environment
+    attr_accessor :proj_dir
     attr_accessor :docs_folder
     attr_accessor :layout_file
     
@@ -14,6 +15,7 @@ module Mardoc
     
     def reset_settings
       @environment = :production
+      @proj_dir    = Dir.pwd
       @docs_folder = 'docs'
       @layout_file = 'layout.html.erb'
     end

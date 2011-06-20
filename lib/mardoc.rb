@@ -8,7 +8,7 @@ require 'mardoc/base'
 module Mardoc
   class LayoutNotFoundError < StandardError; end
   class PageNotFoundError < StandardError; end
-  class ConfigError < StandardError; end  
+  class ConfigError < StandardError; end
     
   def self.configure
     settings = Mardoc::Settings.instance

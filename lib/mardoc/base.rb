@@ -4,6 +4,7 @@ module Mardoc
     
     class << self
       def call(env)
+        @doc_index ||= build_index
         dup.call!(env)
       end
 
@@ -28,13 +29,12 @@ module Mardoc
       end
     
       def render(path)
-        docs_path   = File.join(Dir.pwd, Mardoc.docs_folder)
-        layout_path = File.join(Dir.pwd, Mardoc.layout_file)
+        docs_path   = File.join(Mardoc.proj_dir, Mardoc.docs_folder)
+        layout_path = File.join(Mardoc.proj_dir, Mardoc.layout_file)
         file_path   = File.join(docs_path, path.sub(/(\.md)?$/, '.md'))
         
         raise Mardoc::LayoutNotFoundError, "Layout not found at #{layout_path}" unless File.exist? layout_path
         raise Mardoc::PageNotFoundError, "Page not found at #{path}" unless File.exist? file_path 
-        
         
         render_layout(layout_path) do
           render_doc(file_path)
@@ -63,6 +63,15 @@ module Mardoc
         @response.close
         @response.finish
       end
+      
+      def build_index
+        docs_path = File.join(Mardoc.proj_dir, Mardoc.docs_folder)
+        if File.exist? docs_path
+          md_ext = /\.md$/
+          Dir["#{docs_path}/**/*"].reject { |p| p.match(md_ext).nil? }.map { |p| p.sub(Mardoc.proj_dir, '').sub(md_ext, '') }
+        end
+      end
+      
     
     end
   end

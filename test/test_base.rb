@@ -2,8 +2,9 @@ require File.dirname(__FILE__) + '/helper'
 
 describe Mardoc::Base do
   before do
-    Mardoc.docs_folder = 'test_app/docs'
-    Mardoc.layout_file = 'test_app/layout.html.erb'
+    Mardoc.proj_dir = File.join(Dir.pwd, 'test_app')
+    Mardoc.docs_folder = 'docs'
+    Mardoc.layout_file = 'layout.html.erb'
     @browser = Rack::Test::Session.new(Rack::MockSession.new(Mardoc::Base))    
   end
 
