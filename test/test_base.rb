@@ -20,6 +20,12 @@ describe Mardoc::Base do
     @browser.last_response.body.must_equal "<html><h1>deep/two</h1>\n</html>"
   end
   
+  it 'generates a sitemap' do
+    @browser.get '/sitemap'
+    @browser.last_response.ok?.must_equal true
+    @browser.last_response.body.must_equal "<html><ul>\n\n  <li><a href='/deep/two'>/deep/two</a></li>\n\n  <li><a href='/one'>/one</a></li>\n\n</ul></html>"
+  end
+  
   it '404s if a page does not exist' do
     @browser.get '/not-real'
     @browser.last_response.ok?.must_equal false

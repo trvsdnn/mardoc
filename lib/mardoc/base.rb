@@ -29,6 +29,8 @@ module Mardoc
       end
     
       def render(path)
+        return render_sitemap if @request.path == '/sitemap'
+        
         docs_path   = File.join(Mardoc.proj_dir, Mardoc.docs_folder)
         layout_path = File.join(Mardoc.proj_dir, Mardoc.layout_file)
         file_path   = File.join(docs_path, path.sub(/(\.md)?$/, '.md'))
@@ -38,6 +40,15 @@ module Mardoc
         
         render_layout(layout_path) do
           render_doc(file_path)
+        end
+      end
+      
+      def render_sitemap
+        layout_path = File.join(Mardoc.proj_dir, Mardoc.layout_file)
+        sitemap_template_path = File.expand_path('views/sitemap.html.erb', File.dirname(__FILE__))
+        
+        render_layout(layout_path) do
+          ERB.new(File.read(sitemap_template_path)).result(binding)
         end
       end
       
@@ -68,7 +79,7 @@ module Mardoc
         docs_path = File.join(Mardoc.proj_dir, Mardoc.docs_folder)
         if File.exist? docs_path
           md_ext = /\.md$/
-          Dir["#{docs_path}/**/*"].reject { |p| p.match(md_ext).nil? }.map { |p| p.sub(Mardoc.proj_dir, '').sub(md_ext, '') }
+          Dir["#{docs_path}/**/*"].reject { |p| p.match(md_ext).nil? }.map { |p| p.sub(docs_path, '').sub(md_ext, '') }
         end
       end
       
