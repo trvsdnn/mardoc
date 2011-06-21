@@ -1,5 +1,5 @@
 <ul>
 <% @doc_index.each do |page| %>
-  <li><a href='<%= page %>'><%= page %></a></li>
+  <li><a href='<%= page[:path] %>'><%= page[:title] %></a></li>
 <% end %>
 </ul>

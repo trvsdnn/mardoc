@@ -1,41 +1,53 @@
 require File.dirname(__FILE__) + '/helper'
 
 describe Mardoc::Base do
+  include Rack::Test::Methods
+  
+  def app
+    Mardoc::Base.new
+  end
+  
   before do
     Mardoc.proj_dir = File.join(Dir.pwd, 'test_app')
     Mardoc.docs_folder = 'docs'
     Mardoc.layout_file = 'layout.html.erb'
-    @browser = Rack::Test::Session.new(Rack::MockSession.new(Mardoc::Base))    
+    # @browser = Rack::Test::Session.new(Rack::MockSession.new(Mardoc::Base.new))
   end
   
   it 'resolves index pages' do
-    @browser.get '/'
-    @browser.last_response.ok?.must_equal true
-    @browser.last_response.body.must_equal "<html><h1>index</h1>\n</html>"
+    get '/'
+    last_response.ok?.must_equal true
+    last_response.body.must_equal "<html><h1>index</h1>\n</html>"
   end
 
   it 'gets a page' do
-    @browser.get '/one'
-    @browser.last_response.ok?.must_equal true
-    @browser.last_response.body.must_equal "<html><h1>one</h1>\n</html>"
+    get '/one'
+    last_response.ok?.must_equal true
+    last_response.body.must_equal "<html><h1>one</h1>\n</html>"
   end
   
   it 'gets a nested page' do
-    @browser.get '/deep/two'
-    @browser.last_response.ok?.must_equal true
-    @browser.last_response.body.must_equal "<html><h1>deep/two</h1>\n</html>"
+    get '/deep/two'
+    last_response.ok?.must_equal true
+    last_response.body.must_equal "<html><h1>deep/two</h1>\n\n<p>Guess what? Here lives two, the best thing in the world. This is for search, and other stuff.</p>\n</html>"
   end
   
   it 'generates a sitemap' do
-    @browser.get '/sitemap'
-    @browser.last_response.ok?.must_equal true
-    @browser.last_response.body.must_equal "<html><ul>\n\n  <li><a href='/deep/two'>/deep/two</a></li>\n\n  <li><a href='/'>/</a></li>\n\n  <li><a href='/one'>/one</a></li>\n\n</ul></html>"
+    get '/sitemap'
+    last_response.ok?.must_equal true
+    last_response.body.must_equal "<html><ul>\n\n  <li><a href='/deep/two'>Two</a></li>\n\n  <li><a href='/'>Index</a></li>\n\n  <li><a href='/one'>One</a></li>\n\n</ul></html>"
+  end
+  
+  it 'searches the docs for a given query' do
+    get '/search?query=two'
+    last_response.ok?.must_equal true
+    last_response.body.must_equal "<html><div id='results'>\n  <ul>\n  \n    <li>\n      <a href='/deep/two'>Two</a>\n      <p>Guess what? Here lives two, the best thing in the world. This is for search, and other stuff.</p>\n\n    </li>\n  \n  </ul>\n</div></html>"
   end
   
   it '404s if a page does not exist' do
-    @browser.get '/not-real'
-    @browser.last_response.ok?.must_equal false
-    @browser.last_response.body.must_equal '404 Page not found at /not-real'
+    get '/not-real'
+    last_response.ok?.must_equal false
+    last_response.body.must_equal '404 Page not found at /not-real'
   end
 
 end

@@ -1,0 +1,10 @@
+<div id='results'>
+  <ul>
+  <% @results.each do |page| %>
+    <li>
+      <a href='<%= page[:path] %>'><%= page[:title] %></a>
+      <%= page[:summary] %>
+    </li>
+  <% end if @results %>
+  </ul>
+</div>

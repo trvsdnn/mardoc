@@ -3,6 +3,8 @@ require 'erb'
 require 'rdiscount'
 require 'mardoc/cli'
 require 'mardoc/settings'
+require 'mardoc/extensions'
+require 'mardoc/index'
 require 'mardoc/base'
 
 module Mardoc
