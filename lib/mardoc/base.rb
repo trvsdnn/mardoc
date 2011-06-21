@@ -18,7 +18,7 @@ module Mardoc
       private
     
       def respond!
-        @response['Content-Type'] = Rack::Mime.mime_type(File.extname(@request.path), 'text/html')
+        @response['Content-Type'] = 'text/html'
         @response.write render(@request.path)
         @response.close
         @response.finish
@@ -33,7 +33,7 @@ module Mardoc
         
         docs_path   = File.join(Mardoc.proj_dir, Mardoc.docs_folder)
         layout_path = File.join(Mardoc.proj_dir, Mardoc.layout_file)
-        file_path   = File.join(docs_path, path.sub(/(\.md)?$/, '.md'))
+        file_path   = File.join(docs_path, path.sub(/\/$/, '/index').sub(/(\.md)?$/, '.md'))
         
         raise Mardoc::LayoutNotFoundError, "Layout not found at #{layout_path}" unless File.exist? layout_path
         raise Mardoc::PageNotFoundError, "Page not found at #{path}" unless File.exist? file_path 
@@ -79,7 +79,7 @@ module Mardoc
         docs_path = File.join(Mardoc.proj_dir, Mardoc.docs_folder)
         if File.exist? docs_path
           md_ext = /\.md$/
-          Dir["#{docs_path}/**/*"].reject { |p| p.match(md_ext).nil? }.map { |p| p.sub(docs_path, '').sub(md_ext, '') }
+          Dir["#{docs_path}/**/*"].reject { |p| p.match(md_ext).nil? }.map { |p| p.sub(docs_path, '').sub(md_ext, '').sub(/\/index$/, '/') }
         end
       end
       
