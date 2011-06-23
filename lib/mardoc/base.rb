@@ -7,6 +7,7 @@ module Mardoc
       @app = app
       @docs_path   = File.join(Mardoc.proj_dir, Mardoc.docs_folder)
       @layout_path = File.join(Mardoc.proj_dir, Mardoc.layout_file)
+      @internal_views_path = File.expand_path('views', File.dirname(__FILE__))
       @doc_index ||= build_index
     end
     
@@ -45,7 +46,7 @@ module Mardoc
     end
     
     def render_sitemap
-      sitemap_template_path = File.expand_path('views/sitemap.html.erb', File.dirname(__FILE__))
+      sitemap_template_path = File.join(@internal_views_path, 'sitemap.html.erb')
       
       render_layout do
         ERB.new(File.read(sitemap_template_path)).result(binding)
@@ -53,7 +54,7 @@ module Mardoc
     end
     
     def render_search
-      search_template_path = File.expand_path('views/search.html.erb', File.dirname(__FILE__))
+      search_template_path = File.join(@internal_views_path, 'search.html.erb')
       search(@request.params['query'])
       
       render_layout do
@@ -72,14 +73,14 @@ module Mardoc
   
     def render_404
       @response.status = 404
-      @response.write "404 Page not found at #{@request.path}"
+      @response.write ERB.new(File.read(File.join(@internal_views_path, '404.html.erb'))).result(binding)
       @response.close
       @response.finish
     end
   
     def render_500(exception)
       @response.status = 500
-      @response.write "<p>#{exception.message.to_s}<p/><p>#{exception.backtrace.join('<br />')}</p>"
+      @response.write ERB.new(File.read(File.join(@internal_views_path, '500.html.erb'))).result(binding)
       @response.close
       @response.finish
     end

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+  <head>
+    <title>500 - Oops</title>
+    <style type="text/css" media="screen">
+      body {
+        background: #efefef; 
+        color: #333; 
+        font-family: Helvetica, Arial, sans-serif; }
+
+      p {
+        font-size: 14px;
+        line-height: 18px; }
+        
+      code {
+        font-family: Monaco, Courier-New, monospace;
+        font-size: 12px;
+        border: 1px solid #ccc; }
+        
+      pre {
+        margin: 20px 0;
+        padding: 7px;
+        background: #dfdfdf;
+        border: 1px solid #aaa;
+        border-left: 4px solid #aaa; }
+
+      pre code { border: none; }
+
+      #main {
+        margin: 50px auto;
+        width: 800px; }
+    </style>
+  </head>
+  <body>
+    
+    <div id='main'>      
+      <h1><%= exception.message %></h1>
+        <pre>
+          <code><%= exception.backtrace.map(&:chomp).join("\n") %></code>
+        </pre>
+    </div>
+  </body>
+</html>

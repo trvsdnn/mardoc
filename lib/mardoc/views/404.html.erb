@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+  <head>
+    <title>404 - Page Not Found</title>
+    <style type="text/css" media="screen">
+      body {
+        background: #efefef; 
+        color: #333; 
+        font-family: Helvetica, Arial, sans-serif; }
+
+      p {
+        font-size: 14px;
+        line-height: 18px; }
+
+        code {
+          font-family: Monaco, Courier-New, monospace;
+          font-size: 12px;
+          border: 1px solid #ccc; }
+
+        pre {
+          margin: 20px 0;
+          padding: 7px;
+          background: #dfdfdf;
+          border: 1px solid #aaa;
+          border-left: 4px solid #aaa;
+          overflow-y: hidden;
+          overflow-x: scroll; }
+
+        pre code { border: none; }
+
+      #main {
+        margin: 50px auto;
+        width: 800px; }
+    </style>
+  </head>
+  <body>
+    
+    <div id='main'>
+      <h1>Page Not Found at <%= @request.path %></h1>
+      <p>Trying creating a page here: <%= File.join(@docs_path, "#{@request.path}.md") %></p>
+    </div>
+  </body>
+</html>

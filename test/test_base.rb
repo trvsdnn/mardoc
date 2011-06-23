@@ -47,7 +47,7 @@ describe Mardoc::Base do
   it '404s if a page does not exist' do
     get '/not-real'
     last_response.ok?.must_equal false
-    last_response.body.must_equal '404 Page not found at /not-real'
+    last_response.body.must_match Regexp.new('Page Not Found at \\/not\\-real')
   end
 
 end
