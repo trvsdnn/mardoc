@@ -11,7 +11,6 @@ describe Mardoc::Base do
     Mardoc.proj_dir = File.join(Dir.pwd, 'test_app')
     Mardoc.docs_folder = 'docs'
     Mardoc.layout_file = 'layout.html.erb'
-    # @browser = Rack::Test::Session.new(Rack::MockSession.new(Mardoc::Base.new))
   end
   
   it 'resolves index pages' do
