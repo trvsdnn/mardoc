@@ -1,14 +1,13 @@
 module Mardoc
   class Base
     include Rack::Utils
-    include Mardoc::Index
     
     def initialize(app=nil, options={})
       @app = app
       @docs_path   = File.join(Mardoc.proj_dir, Mardoc.docs_folder)
       @layout_path = File.join(Mardoc.proj_dir, Mardoc.layout_file)
       @internal_views_path = File.expand_path('views', File.dirname(__FILE__))
-      @doc_index ||= build_index
+      @doc_index ||= Mardoc::Index.build
     end
     
     def call(env)
@@ -63,7 +62,9 @@ module Mardoc
     end
     
     def render_layout(&block)
-      ERB.new(File.read(@layout_path)).result(binding)
+      context = Mardoc::Context.new(:doc_index => @doc_index,
+                                    :request => @request)
+      ERB.new(File.read(@layout_path)).result(context.get_binding(&block))
     end
   
     def render_doc(file_path)

@@ -5,12 +5,15 @@ require 'mardoc/cli'
 require 'mardoc/settings'
 require 'mardoc/extensions'
 require 'mardoc/index'
+require 'mardoc/context'
 require 'mardoc/base'
 
 module Mardoc
   class LayoutNotFoundError < StandardError; end
   class PageNotFoundError < StandardError; end
   class ConfigError < StandardError; end
+  
+  MD_EXT = /\.md$/
     
   def self.configure
     settings = Mardoc::Settings.instance
